@@ -4,15 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NuSound | Discover & Upload Music</title>
-<!-- Tailwind CSS CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
-<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 <style>
   body { font-family: 'Roboto', sans-serif; background-color: #121212; color: #fff; }
   h1, h2, h3 { font-family: 'Montserrat Alternates', sans-serif; }
   .glass { background: rgba(18,18,18,0.7); backdrop-filter: blur(10px); border-radius: 1rem; }
   .hover-glow:hover { box-shadow: 0 0 15px #1DB954; transition: 0.3s; }
+  .carousel-track { display: flex; gap: 1rem; transition: transform 0.5s ease; }
+  .carousel-item { min-width: 200px; height: 200px; background-color: #1a1a1a; border-radius: 1rem; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
+  .dragover { border: 2px dashed #1DB954; }
 </style>
 </head>
 <body class="overflow-x-hidden">
@@ -26,10 +27,14 @@
     <a href="#fan-dashboard" class="px-6 py-3 border border-[#9B59B6] rounded-lg font-semibold ml-4 hover:bg-[#9B59B6] transition">Discover Artists</a>
   </div>
   <!-- Animated featured artists carousel -->
-  <div class="absolute bottom-10 w-full flex justify-center space-x-4">
-    <div class="w-32 h-32 bg-gray-800 rounded-xl hover-glow flex items-center justify-center">Artist 1</div>
-    <div class="w-32 h-32 bg-gray-800 rounded-xl hover-glow flex items-center justify-center">Artist 2</div>
-    <div class="w-32 h-32 bg-gray-800 rounded-xl hover-glow flex items-center justify-center">Artist 3</div>
+  <div class="absolute bottom-10 w-full overflow-hidden">
+    <div class="carousel-track">
+      <div class="carousel-item hover-glow">Artist 1</div>
+      <div class="carousel-item hover-glow">Artist 2</div>
+      <div class="carousel-item hover-glow">Artist 3</div>
+      <div class="carousel-item hover-glow">Artist 4</div>
+      <div class="carousel-item hover-glow">Artist 5</div>
+    </div>
   </div>
 </section>
 
@@ -38,23 +43,19 @@
   <h2 class="text-4xl font-bold mb-8">Artist Dashboard</h2>
   <div class="grid md:grid-cols-2 gap-8">
     <!-- Music Upload Card -->
-    <div class="glass p-6 hover-glow">
+    <div class="glass p-6 hover-glow" id="uploadCard">
       <h3 class="text-2xl font-semibold mb-4">Upload New Track</h3>
       <input type="text" placeholder="Track Title" class="w-full p-3 mb-3 rounded bg-gray-800 border border-gray-700">
-      <input type="file" class="w-full mb-3 text-gray-400">
-      <input type="file" class="w-full mb-3 text-gray-400" placeholder="Upload Artwork">
+      <div id="dropZone" class="w-full p-6 mb-3 rounded bg-gray-800 border border-gray-700 text-center">
+        Drag & Drop Track or Artwork Here
+      </div>
       <button class="px-4 py-2 bg-[#1DB954] rounded-lg font-semibold hover:bg-[#1ed760] transition">Upload</button>
     </div>
 
     <!-- Analytics Card -->
     <div class="glass p-6 hover-glow">
       <h3 class="text-2xl font-semibold mb-4">Analytics</h3>
-      <ul class="space-y-2 text-gray-300">
-        <li>Fans: 1,245</li>
-        <li>Total Streams: 45,762</li>
-        <li>New Fan Mail: 12</li>
-        <li>Album Downloads: 3,421</li>
-      </ul>
+      <canvas id="analyticsChart" class="bg-gray-900 rounded-lg p-4"></canvas>
     </div>
   </div>
 
@@ -78,12 +79,12 @@
       <h3 class="text-2xl font-semibold mb-4">Now Playing</h3>
       <div class="flex items-center justify-between mb-4">
         <div>
-          <p class="font-semibold">Track Title</p>
-          <p class="text-gray-300">Artist Name</p>
+          <p class="font-semibold" id="trackTitle">Track Title</p>
+          <p class="text-gray-300" id="artistName">Artist Name</p>
         </div>
-        <button class="px-4 py-2 bg-[#1DB954] rounded-lg font-semibold hover:bg-[#1ed760] transition">Play</button>
+        <button id="playPauseBtn" class="px-4 py-2 bg-[#1DB954] rounded-lg font-semibold hover:bg-[#1ed760] transition">Play</button>
       </div>
-      <input type="range" class="w-full accent-[#1DB954]">
+      <input type="range" id="trackProgress" class="w-full accent-[#1DB954]" min="0" value="0">
     </div>
 
     <!-- Fan Mail -->
@@ -100,5 +101,67 @@
   &copy; 2026 NuSound. All Rights Reserved.
 </footer>
 
+<!-- ====== SCRIPTS ====== -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // ===== Carousel Animation =====
+  const track = document.querySelector('.carousel-track');
+  let position = 0;
+  setInterval(() => {
+    position -= 220; // width + gap
+    if (Math.abs(position) >= track.scrollWidth / 2) position = 0;
+    track.style.transform = `translateX(${position}px)`;
+  }, 3000);
+
+  // ===== Drag & Drop Upload =====
+  const dropZone = document.getElementById('dropZone');
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('dragover');
+  });
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    const files = e.dataTransfer.files;
+    alert(`${files.length} file(s) ready to upload!`);
+  });
+
+  // ===== Analytics Chart =====
+  const ctx = document.getElementById('analyticsChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      datasets: [{
+        label: 'Streams',
+        data: [120, 190, 150, 220, 300, 250, 400],
+        borderColor: '#1DB954',
+        backgroundColor: 'rgba(29, 185, 84, 0.2)',
+        tension: 0.3,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#fff' } } },
+      scales: {
+        x: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+        y: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+      }
+    }
+  });
+
+  // ===== Music Player Mock =====
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  let playing = false;
+  playPauseBtn.addEventListener('click', () => {
+    playing = !playing;
+    playPauseBtn.textContent = playing ? 'Pause' : 'Play';
+  });
+</script>
+
 </body>
-</html>
+  </html>
