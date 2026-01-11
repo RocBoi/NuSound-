@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NuSound | Discover & Upload Music</title>
+<title>NuSound | RocBoi Quez</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -26,10 +26,10 @@
     <a href="#artist-dashboard" class="px-6 py-3 bg-[#1DB954] rounded-lg font-semibold hover:bg-[#1ed760] transition">Upload Music</a>
     <a href="#fan-dashboard" class="px-6 py-3 border border-[#9B59B6] rounded-lg font-semibold ml-4 hover:bg-[#9B59B6] transition">Discover Artists</a>
   </div>
-  <!-- Animated featured artists carousel -->
+  <!-- Featured Artist Carousel -->
   <div class="absolute bottom-10 w-full overflow-hidden">
     <div class="carousel-track">
-      <div class="carousel-item hover-glow">Artist 1</div>
+      <div class="carousel-item hover-glow">RocBoi Quez</div>
       <div class="carousel-item hover-glow">Artist 2</div>
       <div class="carousel-item hover-glow">Artist 3</div>
       <div class="carousel-item hover-glow">Artist 4</div>
@@ -77,10 +77,14 @@
     <!-- Music Player -->
     <div class="glass p-6 hover-glow">
       <h3 class="text-2xl font-semibold mb-4">Now Playing</h3>
+
+      <!-- Audio Player -->
+      <audio id="audioPlayer" src="https://drive.google.com/uc?export=download&id=eph3DNjSYHboeXH5N"></audio>
+
       <div class="flex items-center justify-between mb-4">
         <div>
-          <p class="font-semibold" id="trackTitle">Track Title</p>
-          <p class="text-gray-300" id="artistName">Artist Name</p>
+          <p class="font-semibold" id="trackTitle">If I Lied</p>
+          <p class="text-gray-300" id="artistName">RocBoi Quez</p>
         </div>
         <button id="playPauseBtn" class="px-4 py-2 bg-[#1DB954] rounded-lg font-semibold hover:bg-[#1ed760] transition">Play</button>
       </div>
@@ -93,6 +97,16 @@
       <textarea class="w-full p-3 mb-3 rounded bg-gray-800 border border-gray-700" rows="5" placeholder="Write a message to your favorite artist..."></textarea>
       <button class="px-4 py-2 bg-[#9B59B6] rounded-lg font-semibold hover:bg-[#8e44ad] transition">Send</button>
     </div>
+  </div>
+</section>
+
+<!-- ====== PUBLIC ARTIST SECTION ====== -->
+<section class="px-6 py-16 bg-gray-800">
+  <h2 class="text-4xl font-bold mb-6 text-center">RocBoi Quez</h2>
+  <img src="https://via.placeholder.com/256" alt="RocBoi Quez" class="w-64 h-64 rounded-full mb-4 mx-auto">
+  <p class="text-center text-lg text-gray-300 mb-4">Hip-Hop artist from Atlanta, GA</p>
+  <div class="text-center">
+    <a href="#fan-dashboard" class="px-6 py-3 bg-[#1DB954] rounded-lg font-semibold hover:bg-[#1ed760]">Listen to If I Lied</a>
   </div>
 </section>
 
@@ -154,14 +168,29 @@
     }
   });
 
-  // ===== Music Player Mock =====
+  // ===== Music Player Controls =====
+  const audioPlayer = document.getElementById('audioPlayer');
   const playPauseBtn = document.getElementById('playPauseBtn');
-  let playing = false;
+  const trackProgress = document.getElementById('trackProgress');
+
   playPauseBtn.addEventListener('click', () => {
-    playing = !playing;
-    playPauseBtn.textContent = playing ? 'Pause' : 'Play';
+    if (audioPlayer.paused) {
+      audioPlayer.play();
+      playPauseBtn.textContent = 'Pause';
+    } else {
+      audioPlayer.pause();
+      playPauseBtn.textContent = 'Play';
+    }
+  });
+
+  audioPlayer.addEventListener('timeupdate', () => {
+    trackProgress.value = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+  });
+
+  trackProgress.addEventListener('input', () => {
+    audioPlayer.currentTime = (trackProgress.value / 100) * audioPlayer.duration;
   });
 </script>
 
 </body>
-  </html>
+        </html>
