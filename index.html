@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NuSound | Discover & Upload Music</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Roboto', sans-serif; background-color: #121212; color: #fff; }
+  h1, h2, h3 { font-family: 'Montserrat Alternates', sans-serif; }
+  .glass { background: rgba(18,18,18,0.7); backdrop-filter: blur(10px); border-radius: 1rem; }
+  .hover-glow:hover { box-shadow: 0 0 15px #1DB954; transition: 0.3s; }
+</style>
+</head>
+<body class="overflow-x-hidden">
+
+<!-- ====== HERO SECTION ====== -->
+<section class="relative h-screen flex flex-col justify-center items-center text-center px-6">
+  <h1 class="text-5xl md:text-6xl font-bold mb-6">NuSound</h1>
+  <p class="text-xl md:text-2xl mb-8">Launch Your Music Career. Discover, Upload, Engage.</p>
+  <div>
+    <a href="#artist-dashboard" class="px-6 py-3 bg-[#1DB954] rounded-lg font-semibold hover:bg-[#1ed760] transition">Upload Music</a>
+    <a href="#fan-dashboard" class="px-6 py-3 border border-[#9B59B6] rounded-lg font-semibold ml-4 hover:bg-[#9B59B6] transition">Discover Artists</a>
+  </div>
+  <!-- Animated featured artists carousel -->
+  <div class="absolute bottom-10 w-full flex justify-center space-x-4">
+    <div class="w-32 h-32 bg-gray-800 rounded-xl hover-glow flex items-center justify-center">Artist 1</div>
+    <div class="w-32 h-32 bg-gray-800 rounded-xl hover-glow flex items-center justify-center">Artist 2</div>
+    <div class="w-32 h-32 bg-gray-800 rounded-xl hover-glow flex items-center justify-center">Artist 3</div>
+  </div>
+</section>
+
+<!-- ====== ARTIST DASHBOARD ====== -->
+<section id="artist-dashboard" class="px-6 py-16">
+  <h2 class="text-4xl font-bold mb-8">Artist Dashboard</h2>
+  <div class="grid md:grid-cols-2 gap-8">
+    <!-- Music Upload Card -->
+    <div class="glass p-6 hover-glow">
+      <h3 class="text-2xl font-semibold mb-4">Upload New Track</h3>
+      <input type="text" placeholder="Track Title" class="w-full p-3 mb-3 rounded bg-gray-800 border border-gray-700">
+      <input type="file" class="w-full mb-3 text-gray-400">
+      <input type="file" class="w-full mb-3 text-gray-400" placeholder="Upload Artwork">
+      <button class="px-4 py-2 bg-[#1DB954] rounded-lg font-semibold hover:bg-[#1ed760] transition">Upload</button>
+    </div>
+
+    <!-- Analytics Card -->
+    <div class="glass p-6 hover-glow">
+      <h3 class="text-2xl font-semibold mb-4">Analytics</h3>
+      <ul class="space-y-2 text-gray-300">
+        <li>Fans: 1,245</li>
+        <li>Total Streams: 45,762</li>
+        <li>New Fan Mail: 12</li>
+        <li>Album Downloads: 3,421</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Fan Mail -->
+  <div class="glass p-6 mt-8 hover-glow">
+    <h3 class="text-2xl font-semibold mb-4">Fan Mail</h3>
+    <div class="h-40 overflow-y-scroll bg-gray-900 p-4 rounded">
+      <p class="mb-2"><strong>Fan1:</strong> Love your new track!</p>
+      <p class="mb-2"><strong>Fan2:</strong> When is the next album dropping?</p>
+      <p class="mb-2"><strong>Fan3:</strong> Your music changed my week.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FAN DASHBOARD ====== -->
+<section id="fan-dashboard" class="px-6 py-16 bg-gray-900">
+  <h2 class="text-4xl font-bold mb-8">Fan Dashboard</h2>
+  <div class="grid md:grid-cols-2 gap-8">
+    <!-- Music Player -->
+    <div class="glass p-6 hover-glow">
+      <h3 class="text-2xl font-semibold mb-4">Now Playing</h3>
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <p class="font-semibold">Track Title</p>
+          <p class="text-gray-300">Artist Name</p>
+        </div>
+        <button class="px-4 py-2 bg-[#1DB954] rounded-lg font-semibold hover:bg-[#1ed760] transition">Play</button>
+      </div>
+      <input type="range" class="w-full accent-[#1DB954]">
+    </div>
+
+    <!-- Fan Mail -->
+    <div class="glass p-6 hover-glow">
+      <h3 class="text-2xl font-semibold mb-4">Send Fan Mail</h3>
+      <textarea class="w-full p-3 mb-3 rounded bg-gray-800 border border-gray-700" rows="5" placeholder="Write a message to your favorite artist..."></textarea>
+      <button class="px-4 py-2 bg-[#9B59B6] rounded-lg font-semibold hover:bg-[#8e44ad] transition">Send</button>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FOOTER ====== -->
+<footer class="py-6 text-center text-gray-400">
+  &copy; 2026 NuSound. All Rights Reserved.
+</footer>
+
+</body>
+</html>
